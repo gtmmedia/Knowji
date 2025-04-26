@@ -56,9 +56,9 @@
 }
 
 /* Focus styles */
-.focus-ring {
+/* .focus-ring {
   @apply focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
-}
+} */
 
 /* Button styles */
 .btn {
@@ -66,11 +66,11 @@
 }
 
 .btn-primary {
-  @apply bg-indigo-600 text-white hover:bg-indigo-700 focus-ring;
+  @apply bg-indigo-600 text-white hover:bg-indigo-700 /* focus-ring */;
 }
 
 .btn-secondary {
-  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 focus-ring;
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 /* focus-ring */;
 }
 
 /* Card styles */
