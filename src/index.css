@@ -1,0 +1,132 @@
+@import 'tailwindcss';
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+@utility section {
+  @apply py-12;
+}
+
+@utility section-title {
+  @apply text-3xl font-bold text-gray-900 mb-8;
+}
+
+@utility card {
+  @apply bg-white rounded-xl shadow-md p-6;
+}
+
+@utility btn {
+  @apply px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+}
+
+@utility btn-primary {
+  @apply bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+@utility btn-secondary {
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-[#f9fafb] text-gray-900 antialiased;
+  }
+
+  h1 {
+    @apply text-4xl font-extrabold tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl font-bold;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold;
+  }
+
+  h4 {
+    @apply text-xl font-semibold;
+  }
+
+  p {
+    @apply text-base text-gray-700;
+  }
+
+  a {
+    @apply text-indigo-600 hover:text-indigo-700;
+  }
+}
+
+/* Flashcard styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out;
+}
