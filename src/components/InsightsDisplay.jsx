@@ -46,7 +46,6 @@ const InsightsDisplay = ({ summary, insights, actionSteps, flashcards }) => {
         </div>
       </section>
 
-      {/* Flashcards Section */}
       {flashcards && flashcards.length > 0 && (
         <section className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Flashcards</h2>

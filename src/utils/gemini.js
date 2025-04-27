@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getSummaryPrompt, getInsightsPrompt, getFlashcardPrompt, getApplyModePrompt } from './prompts';
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
@@ -9,15 +10,19 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const callGeminiAPI = async (prompt, retryCount = 0) => {
   try {
+    console.log('Calling Gemini API...');
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const result = await model.generateContent(prompt);
+    console.log('API call successful');
     return result.response.text();
   } catch (error) {
+    console.error('API Error:', error);
     if (retryCount < MAX_RETRIES) {
+      console.log('Retrying...');
       await sleep(RETRY_DELAY);
       return callGeminiAPI(prompt, retryCount + 1);
     }
-    throw new Error('Failed to generate content. Please try again later.');
+    throw new Error(`API Error: ${error.message}`);
   }
 };
 

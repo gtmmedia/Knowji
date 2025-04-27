@@ -1,4 +1,14 @@
 @import 'tailwindcss';
+/* :root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #0ea5e9;
+  --accent: #f43f5e;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --text: #1e293b;
+  --text-: #64748b;
+} */
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -23,27 +33,27 @@
 }
 
 @utility section {
-  @apply py-12;
+  @apply py-16;
 }
 
 @utility section-title {
-  @apply text-3xl font-bold text-gray-900 mb-8;
+  @apply text-4xl font-bold bg-gradient-to-r   bg-clip-text text-transparent mb-8;
 }
 
 @utility card {
-  @apply bg-white rounded-xl shadow-md p-6;
+  @apply bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg p-8 border border-white/20 transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
 }
 
 @utility btn {
-  @apply px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+  @apply px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105;
 }
 
 @utility btn-primary {
-  @apply bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  @apply bg-gradient-to-r   text-white hover:shadow-lg  focus:outline-none focus:ring-2 focus:ring-offset-2 ;
 }
 
 @utility btn-secondary {
-  @apply bg-gray-100 text-gray-700 hover:bg-gray-200 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  @apply bg-white/10 backdrop-blur-sm text-gray-700  focus:outline-none focus:ring-2 focus:ring-offset-2 ;
 }
 
 @layer base {
@@ -52,35 +62,40 @@
   }
 
   body {
-    @apply bg-[#f9fafb] text-gray-900 antialiased;
+    @apply bg-gradient-to-br  to-gray-100  antialiased;
   }
 
   h1 {
-    @apply text-4xl font-extrabold tracking-tight;
+    @apply text-5xl font-extrabold tracking-tight bg-gradient-to-r   bg-clip-text text-transparent;
   }
 
   h2 {
-    @apply text-3xl font-bold;
+    @apply text-4xl font-bold bg-gradient-to-r   bg-clip-text text-transparent;
   }
 
   h3 {
-    @apply text-2xl font-semibold;
+    @apply text-3xl font-semibold;
   }
 
   h4 {
-    @apply text-xl font-semibold;
+    @apply text-2xl font-semibold;
   }
 
   p {
-    @apply text-base text-gray-700;
+    @apply text-base leading-relaxed;
   }
 
   a {
-    @apply text-indigo-600 hover:text-indigo-700;
+    @apply transition-colors duration-300;
   }
 }
 
-/* Flashcard styles */
+/* Modern Card Styles */
+.glass-card {
+  @apply bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg p-8 border border-white/20 transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
+}
+
+/* Flashcard styles with modern animations */
 .perspective-1000 {
   perspective: 1000px;
 }
@@ -99,11 +114,11 @@
   -webkit-transform: rotateY(180deg);
 }
 
-/* Custom animations */
+/* Modern Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -112,13 +127,13 @@
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   opacity: 0;
 }
 
 @keyframes slideIn {
   from {
-    transform: translateY(20px);
+    transform: translateY(30px);
     opacity: 0;
   }
   to {
@@ -128,5 +143,47 @@
 }
 
 .animate-slide-in {
-  animation: slideIn 0.5s ease-out;
+  animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover Effects */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+.hover-glow {
+  @apply transition-all duration-300 hover:shadow-lg;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-gradient-to-r   bg-clip-text text-transparent;
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply  rounded-full  transition-colors duration-300;
 }
