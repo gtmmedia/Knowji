@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import ContentInputForm from '../components/ContentInputForm';
+import InsightsDisplay from '../components/InsightsDisplay';
 import { useTheme } from '../contexts/ThemeContext';
+import { generateInsights } from '../server/api';
 
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeFeature, setActiveFeature] = useState(null);
   const [showQuickStart, setShowQuickStart] = useState(false);
+  const [insights, setInsights] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -13,8 +17,16 @@ const Home = () => {
   }, []);
 
   const handleContentSubmit = async (formData) => {
-    // Handle content submission logic here
-    console.log('Content submitted:', formData);
+    setIsLoading(true);
+    try {
+      const result = await generateInsights(formData);
+      setInsights(result.insights);
+    } catch (error) {
+      console.error('Error generating insights:', error);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const quickStartSteps = [
@@ -91,6 +103,7 @@ const Home = () => {
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
             <ContentInputForm onSubmit={handleContentSubmit} />
+            <InsightsDisplay insights={insights} isLoading={isLoading} />
           </div>
 
           {/* Quick Start Guide */}
