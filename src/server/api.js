@@ -6,7 +6,15 @@ const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 export async function generateInsights(content) {
   try {
     // Get the generative model
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-1.0-pro',
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 1024,
+      },
+    });
 
     // Create a prompt based on the content type
     let prompt = '';
@@ -37,6 +45,6 @@ export async function generateInsights(content) {
     };
   } catch (error) {
     console.error('Error generating insights:', error);
-    throw new Error('Failed to generate insights');
+    throw new Error('Failed to generate insights: ' + error.message);
   }
 } 
