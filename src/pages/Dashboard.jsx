@@ -22,8 +22,10 @@ const Dashboard = () => {
       try {
         // Temporarily use a mock user ID
         const mockUserId = 'mock-user-id';
-        const userFlashcards = await getFlashcards(mockUserId);
-        const userStudySessions = await getStudySessions(mockUserId);
+        const [userFlashcards, userStudySessions] = await Promise.all([
+          getFlashcards(mockUserId),
+          getStudySessions(mockUserId)
+        ]);
         setFlashcards(userFlashcards);
         setStudySessions(userStudySessions);
       } catch (error) {
@@ -38,12 +40,16 @@ const Dashboard = () => {
   const handleContentSubmit = async (formData) => {
     setIsLoading(true);
     setError(null);
+    setContent(null);
+    
     try {
       const result = await processContent(formData.content, formData.type);
       setContent(result);
+      setToast({ message: 'Content processed successfully!', type: 'success' });
     } catch (error) {
       console.error('Error processing content:', error);
-      setError('Failed to process content. Please try again later.');
+      setError(error.message || 'Failed to process content. Please try again later.');
+      setToast({ message: 'Failed to process content. Please try again.', type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -51,17 +57,25 @@ const Dashboard = () => {
 
   const handleActionStepsSubmit = async (steps) => {
     try {
+      if (!content) {
+        throw new Error('No content available to save');
+      }
+
       const sessionData = {
         title: content.summary[0] || 'Untitled Session',
         summary: content.summary,
         insights: content.insights,
         actionSteps: steps,
         flashcards: content.flashcards,
+        createdAt: new Date().toISOString(),
       };
 
       // Temporarily use a mock user ID
       const mockUserId = 'mock-user-id';
       await saveLearningSession(mockUserId, sessionData);
+      
+      // Update local state
+      setStudySessions(prev => [sessionData, ...prev]);
       setToast({ message: 'Session saved successfully!', type: 'success' });
     } catch (error) {
       console.error('Error saving session:', error);
@@ -71,14 +85,14 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#f9fafb] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-background to-gray-100 flex items-center justify-center">
         <LoadingSpinner size="lg" text="Processing your content..." />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] py-8">
+    <div className="min-h-screen bg-gradient-to-br from-background to-gray-100 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {error && (
           <div className="mb-8 bg-red-50 border border-red-200 rounded-md p-4 animate-fade-in">
@@ -115,21 +129,28 @@ const Dashboard = () => {
               </div>
             )}
 
-            <div className="bg-white rounded-xl shadow-md p-6 animate-fade-in" style={{ animationDelay: '600ms' }}>
+            <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-lg p-6 animate-fade-in" style={{ animationDelay: '600ms' }}>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Activity</h2>
               <div className="space-y-4">
-                {studySessions.map((session, index) => (
-                  <div
-                    key={session.id}
-                    className="bg-gray-50 rounded-lg p-4 border border-gray-200 animate-fade-in"
-                    style={{ animationDelay: `${(index + 1) * 100}ms` }}
-                  >
-                    <p className="text-sm text-gray-500">
-                      {new Date(session.date).toLocaleDateString()}
-                    </p>
-                    <p className="text-gray-900">{session.description}</p>
-                  </div>
-                ))}
+                {studySessions.length === 0 ? (
+                  <p className="text-gray-500 text-center py-4">No recent activity</p>
+                ) : (
+                  studySessions.map((session, index) => (
+                    <div
+                      key={session.id || index}
+                      className="bg-gray-50 rounded-lg p-4 border border-gray-200 animate-fade-in hover:shadow-md transition-all duration-200"
+                      style={{ animationDelay: `${(index + 1) * 100}ms` }}
+                    >
+                      <p className="text-sm text-gray-500">
+                        {new Date(session.createdAt).toLocaleDateString()}
+                      </p>
+                      <p className="text-gray-900 font-medium">{session.title}</p>
+                      <p className="text-gray-600 text-sm mt-1">
+                        {session.summary?.[0] || 'No summary available'}
+                      </p>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
